@@ -1,22 +1,31 @@
-import { useEffect, useState } from 'react';
-import './Player.css';
+import { useEffect, useRef, useState } from 'react';
 import { useBulletContext } from '../BulletContext';
+import './Player.css';
 
 function Player() {
+  const elementRef = useRef<HTMLDivElement | null>(null);
   const [position, setPosition] = useState(0);
   const { shoot } = useBulletContext();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      e.preventDefault();
-
       if (e.key === 'ArrowUp') {
+        e.preventDefault();
         setPosition((position) => position - 10);
       } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
         setPosition((position) => position + 10);
       } else if (e.key === ' ') {
-        // TODO: implement logic to get the top position
-        shoot(0, 0);
+        e.preventDefault();
+
+        if (!elementRef.current) {
+          shoot(0, 0);
+          return;
+        }
+
+        const { top } = elementRef.current.getBoundingClientRect();
+
+        shoot(top, 0);
       }
     };
 
@@ -27,7 +36,9 @@ function Player() {
     };
   }, []);
 
-  return <div className="player" style={{ top: `${position}px` }} />;
+  return (
+    <div ref={elementRef} className="player" style={{ top: `${position}px` }} />
+  );
 }
 
 export default Player;

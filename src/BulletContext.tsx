@@ -37,7 +37,7 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
 
   const updateBullets = () => {
     setBullets((bullets) =>
-      bullets.map((bullet) => ({ ...bullet, left: bullet.left + 1 }))
+      bullets.map((bullet) => ({ ...bullet, left: bullet.left + 10 }))
     );
   };
 

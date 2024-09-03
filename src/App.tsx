@@ -12,7 +12,9 @@ function App() {
     let last = 0;
 
     function animation(now: number) {
-      if (now - last >= 500) {
+      const delta = now - last;
+
+      if (delta >= 1000 / 60) {
         last = now;
         updateBullets();
       }
