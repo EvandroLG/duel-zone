@@ -1,20 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 import { useBulletContext } from '../BulletContext';
 import './Player.css';
+import { usePlayerContext } from '../PlayerContext';
 
 function Player() {
   const elementRef = useRef<HTMLDivElement | null>(null);
-  const [position, setPosition] = useState(0);
+  const [topPosition, setTopPosition] = useState(0);
+  const { playerId } = usePlayerContext();
   const { shoot } = useBulletContext();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setPosition((position) => position - 10);
+        setTopPosition((topPosition) => topPosition - 10);
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setPosition((position) => position + 10);
+        setTopPosition((topPosition) => topPosition + 10);
       } else if (e.key === ' ') {
         e.preventDefault();
 
@@ -36,8 +38,17 @@ function Player() {
     };
   }, []);
 
+  const style =
+    playerId === 1
+      ? { backgroundColor: 'green', left: 0 }
+      : { backgroundColor: 'red', right: 0 };
+
   return (
-    <div ref={elementRef} className="player" style={{ top: `${position}px` }} />
+    <div
+      ref={elementRef}
+      className="player"
+      style={{ top: `${topPosition}px`, ...style }}
+    />
   );
 }
 

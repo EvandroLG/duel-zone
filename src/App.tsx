@@ -3,9 +3,15 @@ import { useBulletContext } from './BulletContext';
 import Player from './components/Player';
 import Bullet from './components/Bullet';
 import './App.css';
+import { usePlayerContext } from './PlayerContext';
 
 function App() {
+  const { playerId, setPlayerId } = usePlayerContext();
   const { bullets, updateBullets } = useBulletContext();
+
+  useEffect(() => {
+    setPlayerId(2);
+  }, []);
 
   useEffect(() => {
     let animationId: number;
@@ -28,6 +34,10 @@ function App() {
       cancelAnimationFrame(animationId);
     };
   }, []);
+
+  if (playerId === 0) {
+    return null;
+  }
 
   return (
     <>
