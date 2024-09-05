@@ -1,8 +1,10 @@
 import { createContext, useContext, useState } from 'react';
 
+type PlayerId = 0 | 1 | 2;
+
 export type PlayerContextType = {
-  playerId: number;
-  setPlayerId: (playerId: 0 | 1 | 2) => void;
+  playerId: PlayerId;
+  setPlayerId: (playerId: PlayerId) => void;
 };
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -18,7 +20,7 @@ export function usePlayerContext() {
 }
 
 export function PlayerProvider({ children }: { children: React.ReactNode }) {
-  const [playerId, setPlayerId] = useState(1);
+  const [playerId, setPlayerId] = useState<PlayerId>(0);
 
   return (
     <PlayerContext.Provider value={{ playerId, setPlayerId }}>

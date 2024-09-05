@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import { usePlayerContext } from './PlayerContext';
 
 type Bullet = {
   id: number;
@@ -25,19 +26,25 @@ export function useBulletContext() {
 }
 
 export function BulletProvider({ children }: { children: React.ReactNode }) {
+  const { playerId } = usePlayerContext();
   const [bullets, setBullets] = useState<Bullet[]>([]);
   let bulletId = 0;
 
   const shoot = (top: number) => {
+    const left = playerId === 1 ? 20 : window.innerWidth - 40;
+
     setBullets((prevBullets) => [
       ...prevBullets,
-      { id: ++bulletId, top, left: 20 },
+      { id: ++bulletId, top, left },
     ]);
   };
 
   const updateBullets = () => {
     setBullets((bullets) =>
-      bullets.map((bullet) => ({ ...bullet, left: bullet.left + 10 }))
+      bullets.map((bullet) => {
+        const left = playerId === 1 ? bullet.left + 10 : bullet.left - 10;
+        return { ...bullet, left };
+      })
     );
   };
 
