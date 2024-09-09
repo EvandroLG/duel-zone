@@ -1,10 +1,11 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import useWebSocket from './useWebSocket';
 
-type PlayerId = 0 | 1 | 2;
+type Players = Array<{ id: number; x: number; y: number }>;
 
 export type PlayerContextType = {
-  playerId: PlayerId;
-  setPlayerId: (playerId: PlayerId) => void;
+  playerId: null | number;
+  players: Players;
 };
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -20,10 +21,24 @@ export function usePlayerContext() {
 }
 
 export function PlayerProvider({ children }: { children: React.ReactNode }) {
-  const [playerId, setPlayerId] = useState<PlayerId>(0);
+  const [playerId, setPlayerId] = useState<number | null>(null);
+  const [players, setPlayers] = useState<Players>([]);
+  const { lastMessage } = useWebSocket();
+
+  useEffect(() => {
+    if (lastMessage?.type === 'playerId') {
+      setPlayerId(lastMessage.data as number);
+      return;
+    }
+
+    if (lastMessage?.type === 'playersUpdate') {
+      setPlayers(lastMessage.data as Players);
+      return;
+    }
+  }, [lastMessage]);
 
   return (
-    <PlayerContext.Provider value={{ playerId, setPlayerId }}>
+    <PlayerContext.Provider value={{ playerId, players }}>
       {children}
     </PlayerContext.Provider>
   );

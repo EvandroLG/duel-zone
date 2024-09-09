@@ -7,7 +7,7 @@ import useWebSocket from '../useWebSocket';
 function Player() {
   const elementRef = useRef<HTMLDivElement | null>(null);
   const [topPosition, setTopPosition] = useState(0);
-  const { playerId } = usePlayerContext();
+  const { playerId, players } = usePlayerContext();
   const { shoot } = useBulletContext();
   const { sendMessage } = useWebSocket();
 
@@ -51,7 +51,7 @@ function Player() {
   }, []);
 
   const style =
-    playerId === 1
+    players[0]?.id === playerId
       ? { backgroundColor: 'green', left: 0 }
       : { backgroundColor: 'red', right: 0 };
 

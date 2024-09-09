@@ -47,7 +47,7 @@ wss.on('connection', (ws) => {
 
 function broadcastGameState() {
   const state = game.getState();
-  broadcast(JSON.stringify({ type: 'gameState', data: state }));
+  broadcast(JSON.stringify({ type: 'playersUpdate', data: state }));
 }
 
 function broadcast(data: string) {

@@ -1,8 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
+
+type WebSocketMessage = {
+  type: string;
+  data: unknown;
+};
 
 const URL = 'ws://localhost:3000';
 
 function useWebSocket() {
+  const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -15,6 +21,8 @@ function useWebSocket() {
 
     ws.onmessage = (e) => {
       console.log('WebSocket message:', e.data);
+      const message = JSON.parse(e.data) as WebSocketMessage;
+      setLastMessage(message);
     };
 
     ws.onerror = (error) => {
@@ -36,7 +44,7 @@ function useWebSocket() {
     }
   };
 
-  return { sendMessage };
+  return { lastMessage, sendMessage };
 }
 
 export default useWebSocket;
