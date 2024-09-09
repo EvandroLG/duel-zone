@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 type WebSocketMessage = {
   type: string;
@@ -6,41 +6,51 @@ type WebSocketMessage = {
 };
 
 const URL = 'ws://localhost:3000';
+let ws: WebSocket | null = null;
 
 function useWebSocket() {
   const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null);
-  const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    const ws = new WebSocket(URL);
-    wsRef.current = ws;
+    console.log('useEffect: Setting up WebSocket connection');
 
-    ws.onopen = () => {
-      console.log('WebSocket connected');
-    };
+    if (!ws) {
+      console.log('Connecting to WebSocket:', URL);
 
-    ws.onmessage = (e) => {
-      console.log('WebSocket message:', e.data);
-      const message = JSON.parse(e.data) as WebSocketMessage;
-      setLastMessage(message);
-    };
+      ws = new WebSocket(URL);
 
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
+      ws.onopen = () => {
+        console.log('WebSocket connected');
+      };
 
-    ws.onclose = () => {
-      console.log('WebSocket disconnected');
-    };
+      ws.onmessage = (e) => {
+        console.log('WebSocket message:', e.data);
+        const message = JSON.parse(e.data) as WebSocketMessage;
+        setLastMessage(message);
+      };
+
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+
+      ws.onclose = () => {
+        console.log('WebSocket disconnected');
+        ws = null;
+      };
+    }
 
     return () => {
-      ws?.close();
+      if (ws) {
+        console.log('Cleaning up WebSocket connection');
+        ws.close();
+        ws = null;
+      }
     };
   }, []);
 
   const sendMessage = (message: object) => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify(message));
+    if (ws?.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify(message));
     }
   };
 

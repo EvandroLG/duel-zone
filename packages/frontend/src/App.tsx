@@ -10,6 +10,7 @@ function App() {
   const { bullets, updateBullets } = useBulletContext();
 
   useEffect(() => {
+    console.log('Setting up App component');
     let animationId: number;
     let last = 0;
 

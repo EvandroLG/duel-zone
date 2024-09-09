@@ -1,4 +1,11 @@
-import { createContext, useContext, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from 'react';
 import { usePlayerContext } from './PlayerContext';
 
 type Bullet = {
@@ -26,12 +33,22 @@ export function useBulletContext() {
 }
 
 export function BulletProvider({ children }: { children: React.ReactNode }) {
-  const { playerId } = usePlayerContext();
+  const { playerId, players } = usePlayerContext();
   const [bullets, setBullets] = useState<Bullet[]>([]);
+  const playersRef = useRef(players);
+  const playerIdRef = useRef(playerId);
   let bulletId = 0;
 
+  useEffect(() => {
+    playersRef.current = players;
+    playerIdRef.current = playerId;
+  }, [players, playerId]);
+
   const shoot = (top: number) => {
-    const left = playerId === 1 ? 20 : window.innerWidth - 40;
+    const left =
+      playersRef.current[0]?.id === playerIdRef.current
+        ? 20
+        : window.innerWidth - 40;
 
     setBullets((prevBullets) => [
       ...prevBullets,
@@ -42,7 +59,11 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
   const updateBullets = () => {
     setBullets((bullets) =>
       bullets.map((bullet) => {
-        const left = playerId === 1 ? bullet.left + 10 : bullet.left - 10;
+        const left =
+          playersRef.current[0]?.id === playerIdRef.current
+            ? bullet.left + 10
+            : bullet.left - 10;
+
         return { ...bullet, left };
       })
     );

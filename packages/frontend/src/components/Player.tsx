@@ -12,6 +12,8 @@ function Player() {
   const { sendMessage } = useWebSocket();
 
   useEffect(() => {
+    console.log('Setting up Player component');
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
         e.preventDefault();
@@ -46,6 +48,7 @@ function Player() {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      console.log('Cleaning up Player component');
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);

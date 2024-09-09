@@ -3,7 +3,7 @@ import useWebSocket from './useWebSocket';
 
 type Players = Array<{ id: number; x: number; y: number }>;
 
-export type PlayerContextType = {
+type PlayerContextType = {
   playerId: null | number;
   players: Players;
 };
@@ -26,12 +26,15 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const { lastMessage } = useWebSocket();
 
   useEffect(() => {
+    console.log('lastMessage', lastMessage);
+
     if (lastMessage?.type === 'playerId') {
       setPlayerId(lastMessage.data as number);
       return;
     }
 
     if (lastMessage?.type === 'playersUpdate') {
+      console.log('Setting players:', lastMessage.data);
       setPlayers(lastMessage.data as Players);
       return;
     }
