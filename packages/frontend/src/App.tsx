@@ -4,10 +4,12 @@ import Player from './components/Player';
 import Bullet from './components/Bullet';
 import './App.css';
 import { usePlayerContext } from './PlayerContext';
+import useWebSocket from './useWebSocket';
 
 function App() {
   const { playerId, setPlayerId } = usePlayerContext();
   const { bullets, updateBullets } = useBulletContext();
+  useWebSocket();
 
   useEffect(() => {
     setPlayerId(2);

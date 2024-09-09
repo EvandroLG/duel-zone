@@ -1,30 +1,42 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-function useWebSocket(url: string) {
-  const ws = useRef<WebSocket | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
+const URL = 'ws://localhost:3000';
+
+function useWebSocket() {
+  const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    ws.current = new WebSocket(url);
+    const ws = new WebSocket(URL);
+    wsRef.current = ws;
 
-    ws.current.onopen = () => {
-      console.log('WebSocket opened');
+    ws.onopen = () => {
+      console.log('WebSocket connected');
     };
 
-    ws.current.onmessage = (event) => {
-      setMessage(event.data);
+    ws.onmessage = (e) => {
+      console.log('WebSocket message:', e.data);
     };
 
-    ws.current.onclose = () => {
-      console.log('WebSocket closed');
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket disconnected');
     };
 
     return () => {
-      ws.current?.close();
+      ws?.close();
     };
-  }, [url]);
+  }, []);
 
-  return message;
+  const sendMessage = (message: object) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify(message));
+    }
+  };
+
+  return { sendMessage };
 }
 
 export default useWebSocket;

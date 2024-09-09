@@ -2,21 +2,33 @@ import { useEffect, useRef, useState } from 'react';
 import { useBulletContext } from '../BulletContext';
 import './Player.css';
 import { usePlayerContext } from '../PlayerContext';
+import useWebSocket from '../useWebSocket';
 
 function Player() {
   const elementRef = useRef<HTMLDivElement | null>(null);
   const [topPosition, setTopPosition] = useState(0);
   const { playerId } = usePlayerContext();
   const { shoot } = useBulletContext();
+  const { sendMessage } = useWebSocket();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setTopPosition((topPosition) => topPosition - 10);
+
+        setTopPosition((topPosition) => {
+          const newPosition = topPosition - 10;
+          sendMessage({ type: 'move', data: newPosition });
+          return newPosition;
+        });
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setTopPosition((topPosition) => topPosition + 10);
+
+        setTopPosition((topPosition) => {
+          const newPosition = topPosition + 10;
+          sendMessage({ type: 'move', data: newPosition });
+          return newPosition;
+        });
       } else if (e.key === ' ') {
         e.preventDefault();
 
