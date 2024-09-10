@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useBulletContext } from './BulletContext';
-import Player from './components/Player';
+import LocalPlayer from './components/LocalPlayer';
+import RemotePlayer from './components/RemotePlayer';
 import Bullet from './components/Bullet';
 import './App.css';
 import { usePlayerContext } from './PlayerContext';
@@ -10,7 +11,6 @@ function App() {
   const { bullets, updateBullets } = useBulletContext();
 
   useEffect(() => {
-    console.log('Setting up App component');
     let animationId: number;
     let last = 0;
 
@@ -38,7 +38,8 @@ function App() {
 
   return (
     <>
-      <Player />
+      <LocalPlayer />
+      <RemotePlayer />
       {bullets.map(({ id, top, left }) => (
         <Bullet key={id} top={top} left={left} />
       ))}

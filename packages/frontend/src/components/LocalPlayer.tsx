@@ -4,7 +4,7 @@ import './Player.css';
 import { usePlayerContext } from '../PlayerContext';
 import useWebSocket from '../useWebSocket';
 
-function Player() {
+function LocalPlayer() {
   const elementRef = useRef<HTMLDivElement | null>(null);
   const [topPosition, setTopPosition] = useState(0);
   const { playerId, players } = usePlayerContext();
@@ -12,7 +12,7 @@ function Player() {
   const { sendMessage } = useWebSocket();
 
   useEffect(() => {
-    console.log('Setting up Player component');
+    console.log('Setting up LocalPlayer component');
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
@@ -48,7 +48,7 @@ function Player() {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      console.log('Cleaning up Player component');
+      console.log('Cleaning up LocalPlayer component');
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
@@ -67,4 +67,4 @@ function Player() {
   );
 }
 
-export default Player;
+export default LocalPlayer;
