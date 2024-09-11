@@ -4,8 +4,14 @@ interface Player {
   y: number;
 }
 
+interface Bullet {
+  x: number;
+  y: number;
+}
+
 class Game {
   public players: Map<number, Player> = new Map();
+  public bullets: Map<number, Bullet[]> = new Map();
   private playerId = 0;
 
   addPlayer(): number {
@@ -26,8 +32,23 @@ class Game {
     }
   }
 
+  shoot(playerId: number, x: number, y: number): void {
+    const player = this.players.get(playerId);
+
+    if (!player) {
+      return;
+    }
+
+    const bullets = this.bullets.get(playerId) || [];
+    bullets.push({ x, y });
+  }
+
   getState(): Player[] {
     return Array.from(this.players.values());
+  }
+
+  getBullets(): Bullet[] {
+    return Array.from(this.bullets.values()).flat();
   }
 }
 

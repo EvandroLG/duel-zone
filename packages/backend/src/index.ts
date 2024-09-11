@@ -33,7 +33,11 @@ wss.on('connection', (ws) => {
     if (type === 'move') {
       game.updatePlayer(playerId, data);
       broadcastGameState();
-      return;
+    }
+
+    if (type === 'shoot') {
+      game.shoot(playerId, data.x, data.y);
+      broadcastBullets();
     }
   });
 
@@ -48,6 +52,11 @@ wss.on('connection', (ws) => {
 function broadcastGameState() {
   const state = game.getState();
   broadcast(JSON.stringify({ type: 'playersUpdate', data: state }));
+}
+
+function broadcastBullets() {
+  const bullets = game.getBullets();
+  broadcast(JSON.stringify({ type: 'bulletsUpdate', data: bullets }));
 }
 
 function broadcast(data: string) {
