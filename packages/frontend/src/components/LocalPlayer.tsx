@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useBulletContext } from '../BulletContext';
-import './Player.css';
 import { usePlayerContext } from '../PlayerContext';
 import useWebSocket from '../useWebSocket';
+
+import './Player.css';
 
 function LocalPlayer() {
   const elementRef = useRef<HTMLDivElement | null>(null);
@@ -10,6 +11,14 @@ function LocalPlayer() {
   const { playerId, players } = usePlayerContext();
   const { shoot } = useBulletContext();
   const { sendMessage } = useWebSocket();
+
+  const style = useMemo(
+    () =>
+      players[0]?.id === playerId
+        ? { backgroundColor: 'green', left: 0 }
+        : { backgroundColor: 'red', right: 0 },
+    [players, playerId]
+  );
 
   useEffect(() => {
     console.log('Setting up LocalPlayer component');
@@ -52,11 +61,6 @@ function LocalPlayer() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
-
-  const style =
-    players[0]?.id === playerId
-      ? { backgroundColor: 'green', left: 0 }
-      : { backgroundColor: 'red', right: 0 };
 
   return (
     <div
