@@ -36,7 +36,7 @@ wss.on('connection', (ws) => {
     }
 
     if (type === 'shoot') {
-      game.shoot(playerId, data.x, data.y);
+      game.updateBullets(playerId, data);
       broadcastBullets();
     }
   });

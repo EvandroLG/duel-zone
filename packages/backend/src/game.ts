@@ -32,15 +32,14 @@ class Game {
     }
   }
 
-  shoot(playerId: number, x: number, y: number): void {
+  updateBullets(playerId: number, bullets: Bullet[]): void {
     const player = this.players.get(playerId);
 
     if (!player) {
       return;
     }
 
-    const bullets = this.bullets.get(playerId) || [];
-    bullets.push({ x, y });
+    this.bullets.set(playerId, bullets);
   }
 
   getState(): Player[] {
