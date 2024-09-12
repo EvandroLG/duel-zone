@@ -30,13 +30,11 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
     if (lastMessage?.type === 'playerId') {
       setPlayerId(lastMessage.data as number);
-      return;
     }
 
     if (lastMessage?.type === 'playersUpdate') {
       console.log('Setting players:', lastMessage.data);
       setPlayers(lastMessage.data as Players);
-      return;
     }
   }, [lastMessage]);
 

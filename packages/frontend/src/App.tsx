@@ -9,7 +9,7 @@ import './App.css';
 
 function App() {
   const { playerId } = usePlayerContext();
-  const { bullets, updateBullets } = useBulletContext();
+  const { remoteBullets, localBullets, updateBullets } = useBulletContext();
 
   console.log('App render');
 
@@ -18,7 +18,7 @@ function App() {
     let last = 0;
 
     function animation(now: number) {
-      if (bullets.length === 0) {
+      if (localBullets.length === 0) {
         return;
       }
 
@@ -37,7 +37,7 @@ function App() {
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, [bullets, updateBullets]);
+  }, [localBullets, updateBullets]);
 
   if (playerId === null) {
     return null;
@@ -47,7 +47,12 @@ function App() {
     <>
       <LocalPlayer />
       <RemotePlayer />
-      {bullets.map(({ id, top, left }) => (
+
+      {localBullets.map(({ id, top, left }) => (
+        <Bullet key={id} top={top} left={left} />
+      ))}
+
+      {remoteBullets.map(({ id, top, left }) => (
         <Bullet key={id} top={top} left={left} />
       ))}
     </>

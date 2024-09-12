@@ -9,7 +9,8 @@ type Bullet = {
 };
 
 type BulletContextType = {
-  bullets: Bullet[];
+  remoteBullets: Bullet[];
+  localBullets: Bullet[];
   shoot: (top: number, left: number) => void;
   updateBullets: () => void;
 };
@@ -28,16 +29,23 @@ export function useBulletContext() {
 
 export function BulletProvider({ children }: { children: React.ReactNode }) {
   const { playerId, players } = usePlayerContext();
-  const [bullets, setBullets] = useState<Bullet[]>([]);
-  const { sendMessage } = useWebSocketContext();
+  const [localBullets, setLocalBullets] = useState<Bullet[]>([]);
+  const [remoteBullets, setRemoteBullets] = useState<Bullet[]>([]);
+  const { lastMessage, sendMessage } = useWebSocketContext();
   const playersRef = useRef(players);
   const playerIdRef = useRef(playerId);
-  let bulletIdRef = useRef(0);
+  const bulletIdRef = useRef(0);
 
   useEffect(() => {
     playersRef.current = players;
     playerIdRef.current = playerId;
   }, [players, playerId]);
+
+  useEffect(() => {
+    if (lastMessage?.type === 'bulletsUpdate') {
+      setRemoteBullets(lastMessage.data as Bullet[]);
+    }
+  }, [lastMessage]);
 
   const shoot = (top: number) => {
     const left =
@@ -45,7 +53,7 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
         ? 20
         : window.innerWidth - 40;
 
-    setBullets((prevBullets) => {
+    setLocalBullets((prevBullets) => {
       const newBullets = [
         ...prevBullets,
         { id: ++bulletIdRef.current, top, left },
@@ -58,7 +66,7 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateBullets = () => {
-    setBullets((prevBullets) => {
+    setLocalBullets((prevBullets) => {
       const newBullets = prevBullets.map((bullet) => {
         const left =
           playersRef.current[0]?.id === playerIdRef.current
@@ -75,7 +83,9 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <BulletContext.Provider value={{ bullets, shoot, updateBullets }}>
+    <BulletContext.Provider
+      value={{ remoteBullets, localBullets, shoot, updateBullets }}
+    >
       {children}
     </BulletContext.Provider>
   );
