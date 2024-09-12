@@ -1,12 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-} from 'react';
+import { createContext, useContext, useState, useRef, useEffect } from 'react';
 import { usePlayerContext } from './PlayerContext';
+import { useWebSocketContext } from './WebSocketContext';
 
 type Bullet = {
   id: number;
@@ -35,9 +29,10 @@ export function useBulletContext() {
 export function BulletProvider({ children }: { children: React.ReactNode }) {
   const { playerId, players } = usePlayerContext();
   const [bullets, setBullets] = useState<Bullet[]>([]);
+  const { sendMessage } = useWebSocketContext();
   const playersRef = useRef(players);
   const playerIdRef = useRef(playerId);
-  let bulletId = 0;
+  let bulletIdRef = useRef(0);
 
   useEffect(() => {
     playersRef.current = players;
@@ -50,23 +45,33 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
         ? 20
         : window.innerWidth - 40;
 
-    setBullets((prevBullets) => [
-      ...prevBullets,
-      { id: ++bulletId, top, left },
-    ]);
+    setBullets((prevBullets) => {
+      const newBullets = [
+        ...prevBullets,
+        { id: ++bulletIdRef.current, top, left },
+      ];
+
+      sendMessage({ type: 'shoot', data: newBullets });
+
+      return newBullets;
+    });
   };
 
   const updateBullets = () => {
-    setBullets((bullets) =>
-      bullets.map((bullet) => {
+    setBullets((prevBullets) => {
+      const newBullets = prevBullets.map((bullet) => {
         const left =
           playersRef.current[0]?.id === playerIdRef.current
             ? bullet.left + 10
             : bullet.left - 10;
 
         return { ...bullet, left };
-      })
-    );
+      });
+
+      sendMessage({ type: 'shoot', data: newBullets });
+
+      return newBullets;
+    });
   };
 
   return (

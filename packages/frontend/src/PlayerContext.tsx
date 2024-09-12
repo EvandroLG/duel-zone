@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import useWebSocket from './useWebSocket';
+import { useWebSocketContext } from './WebSocketContext';
 
 type Players = Array<{ id: number; x: number; y: number }>;
 
@@ -23,7 +23,7 @@ export function usePlayerContext() {
 export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const [playerId, setPlayerId] = useState<number | null>(null);
   const [players, setPlayers] = useState<Players>([]);
-  const { lastMessage } = useWebSocket();
+  const { lastMessage } = useWebSocketContext();
 
   useEffect(() => {
     console.log('lastMessage', lastMessage);

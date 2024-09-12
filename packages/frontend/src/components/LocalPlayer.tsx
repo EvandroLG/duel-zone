@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useBulletContext } from '../BulletContext';
 import { usePlayerContext } from '../PlayerContext';
-import useWebSocket from '../useWebSocket';
+import { useWebSocketContext } from '../WebSocketContext';
 
 import './Player.css';
 
@@ -10,7 +10,7 @@ function LocalPlayer() {
   const [topPosition, setTopPosition] = useState(0);
   const { playerId, players } = usePlayerContext();
   const { shoot } = useBulletContext();
-  const { sendMessage } = useWebSocket();
+  const { sendMessage } = useWebSocketContext();
 
   const style = useMemo(
     () =>
