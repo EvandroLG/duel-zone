@@ -43,7 +43,15 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (lastMessage?.type === 'bulletsUpdate') {
-      setRemoteBullets(lastMessage.data as Bullet[]);
+      const entries = Object.entries(
+        lastMessage.data as Record<string, Bullet[]>
+      );
+
+      const remoteBullets = entries
+        .filter(([key]) => key !== playerIdRef.current?.toString())
+        .flatMap(([, bullets]) => bullets);
+
+      setRemoteBullets(remoteBullets);
     }
   }, [lastMessage]);
 

@@ -22,6 +22,7 @@ class Game {
 
   removePlayer(id: number): void {
     this.players.delete(id);
+    this.bullets.delete(id);
   }
 
   updatePlayer(id: number, y: number): void {
@@ -46,8 +47,8 @@ class Game {
     return Array.from(this.players.values());
   }
 
-  getBullets(): Bullet[] {
-    return Array.from(this.bullets.values()).flat();
+  getBullets(): Record<number, Bullet[]> {
+    return Object.fromEntries(this.bullets);
   }
 }
 
