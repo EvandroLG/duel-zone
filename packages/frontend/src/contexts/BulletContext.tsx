@@ -11,8 +11,8 @@ type Bullet = {
 type BulletContextType = {
   remoteBullets: Bullet[];
   localBullets: Bullet[];
-  shoot: (top: number, left: number) => void;
-  updateBullets: () => void;
+  shoot: (top: number, appWidth: number) => void;
+  updateBullets: (appWidth: number) => void;
 };
 
 const BulletContext = createContext<BulletContextType | undefined>(undefined);
@@ -55,11 +55,9 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
     }
   }, [lastMessage]);
 
-  const shoot = (top: number) => {
+  const shoot = (top: number, appWidth: number) => {
     const left =
-      playersRef.current[0]?.id === playerIdRef.current
-        ? 20
-        : window.innerWidth - 40;
+      playersRef.current[0]?.id === playerIdRef.current ? 20 : appWidth - 20;
 
     setLocalBullets((prevBullets) => {
       const newBullets = [
@@ -73,16 +71,18 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const updateBullets = () => {
+  const updateBullets = (appWidth: number) => {
     setLocalBullets((prevBullets) => {
-      const newBullets = prevBullets.map((bullet) => {
-        const left =
-          playersRef.current[0]?.id === playerIdRef.current
-            ? bullet.left + 10
-            : bullet.left - 10;
+      const newBullets = prevBullets
+        .map((bullet) => {
+          const left =
+            playersRef.current[0]?.id === playerIdRef.current
+              ? bullet.left + 10
+              : bullet.left - 10;
 
-        return { ...bullet, left };
-      });
+          return { ...bullet, left };
+        })
+        .filter(({ left }) => left >= 0 && left <= appWidth);
 
       sendMessage({ type: 'shoot', data: newBullets });
 

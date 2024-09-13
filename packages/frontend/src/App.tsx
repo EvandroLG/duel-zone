@@ -47,7 +47,8 @@ function App() {
 
       if (delta >= FRAME_DURATION) {
         last = now;
-        updateBullets();
+        const { width } = appDimensions;
+        updateBullets(width);
       }
 
       animationId = requestAnimationFrame(animation);

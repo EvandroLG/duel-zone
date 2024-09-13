@@ -13,7 +13,7 @@ function LocalPlayer() {
   const { playerId, players } = usePlayerContext();
   const { shoot } = useBulletContext();
   const { sendMessage } = useWebSocketContext();
-  const { height: appHeight } = useAppDimensionsContext();
+  const { height: appHeight, width: appWidth } = useAppDimensionsContext();
 
   const style = useMemo(
     () =>
@@ -68,7 +68,7 @@ function LocalPlayer() {
 
         const { top } = elementRef.current.getBoundingClientRect();
 
-        shoot(top, 0);
+        shoot(top, appWidth);
       }
     };
 
