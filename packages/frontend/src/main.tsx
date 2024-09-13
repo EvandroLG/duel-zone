@@ -1,8 +1,11 @@
 import { createRoot } from 'react-dom/client';
-import { BulletProvider } from './BulletContext.tsx';
-import { PlayerProvider } from './PlayerContext.tsx';
-import { WebSocketProvider } from './WebSocketContext.tsx';
+
 import App from './App.tsx';
+
+import { BulletProvider } from './contexts/BulletContext.tsx';
+import { PlayerProvider } from './contexts/PlayerContext.tsx';
+import { WebSocketProvider } from './contexts/WebSocketContext.tsx';
+
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(

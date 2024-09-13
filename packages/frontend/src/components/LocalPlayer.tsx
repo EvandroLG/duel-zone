@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useBulletContext } from '../BulletContext';
-import { usePlayerContext } from '../PlayerContext';
-import { useWebSocketContext } from '../WebSocketContext';
+
+import { useBulletContext } from '../contexts/BulletContext';
+import { usePlayerContext } from '../contexts/PlayerContext';
+import { useWebSocketContext } from '../contexts/WebSocketContext';
+import { useAppDimensionsContext } from '../App';
 
 import './Player.css';
 
@@ -11,6 +13,7 @@ function LocalPlayer() {
   const { playerId, players } = usePlayerContext();
   const { shoot } = useBulletContext();
   const { sendMessage } = useWebSocketContext();
+  const { height: appHeight } = useAppDimensionsContext();
 
   const style = useMemo(
     () =>
@@ -29,14 +32,29 @@ function LocalPlayer() {
 
         setTopPosition((topPosition) => {
           const newPosition = topPosition - 10;
+
+          if (newPosition < 0) {
+            sendMessage({ type: 'move', data: 0 });
+            return 0;
+          }
+
           sendMessage({ type: 'move', data: newPosition });
           return newPosition;
         });
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
 
+        console.log('height', appHeight);
+
         setTopPosition((topPosition) => {
           const newPosition = topPosition + 10;
+          const { height } = elementRef.current!.getBoundingClientRect();
+
+          if (newPosition > appHeight - height) {
+            sendMessage({ type: 'move', data: appHeight - height });
+            return appHeight - height;
+          }
+
           sendMessage({ type: 'move', data: newPosition });
           return newPosition;
         });
@@ -60,7 +78,7 @@ function LocalPlayer() {
       console.log('Cleaning up LocalPlayer component');
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [appHeight, elementRef.current]);
 
   return (
     <div

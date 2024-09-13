@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { usePlayerContext } from '../PlayerContext';
+
+import { usePlayerContext } from '../contexts/PlayerContext';
 
 import './Player.css';
 
