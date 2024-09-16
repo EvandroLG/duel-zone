@@ -39,6 +39,10 @@ wss.on('connection', (ws) => {
       game.updateBullets(playerId, data);
       broadcastBullets();
     }
+
+    if (type === 'gameOver') {
+      broadcast(JSON.stringify({ type: 'gameOver', data }));
+    }
   });
 
   ws.on('close', () => {

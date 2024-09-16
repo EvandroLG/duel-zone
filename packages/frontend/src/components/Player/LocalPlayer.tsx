@@ -1,9 +1,10 @@
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 
-import { useBulletContext } from '../contexts/BulletContext';
-import { usePlayerContext } from '../contexts/PlayerContext';
-import { useWebSocketContext } from '../contexts/WebSocketContext';
 import { useAppDimensionsContext } from '../App';
+
+import { useBulletContext } from '../../contexts/BulletContext';
+import { usePlayerContext } from '../../contexts/PlayerContext';
+import { useWebSocketContext } from '../../contexts/WebSocketContext';
 
 import './Player.css';
 

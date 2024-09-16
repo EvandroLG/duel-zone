@@ -1,16 +1,14 @@
 import { useEffect, useContext, useRef, useState, createContext } from 'react';
 
-import LocalPlayer from './components/LocalPlayer';
-import RemotePlayer from './components/RemotePlayer';
+import { LocalPlayer, RemotePlayer } from '../Player';
+import Bullet from '../Bullet';
 
-import {
-  Bullet as BulletType,
-  useBulletContext,
-} from './contexts/BulletContext';
-import { usePlayerContext } from './contexts/PlayerContext';
+import { useBulletContext } from '../../contexts/BulletContext';
+import { usePlayerContext } from '../../contexts/PlayerContext';
+import { useWebSocketContext } from '../../contexts/WebSocketContext';
 
 import './App.css';
-import Bullet from './components/Bullet';
+import { hasCollision } from './utils';
 
 type AppDimensionsContextType = {
   width: number;
@@ -26,37 +24,18 @@ export function useAppDimensionsContext() {
   return useContext(AppDimensionsContext);
 }
 
-function hasCollision(bullets: BulletType[], playerBounds: DOMRect): boolean {
-  for (const bullet of bullets) {
-    if (
-      !(bullet.top >= playerBounds.top && bullet.top <= playerBounds.bottom)
-    ) {
-      return false;
-    }
-
-    if (playerBounds.x > 0 && bullet.left >= playerBounds.x) {
-      return true;
-    }
-
-    if (playerBounds.x === 0 && bullet.left <= playerBounds.x) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 const FRAME_DURATION = 1000 / 60;
 
-function App() {
+function AppEngine() {
+  const { sendMessage } = useWebSocketContext();
   const { playerId } = usePlayerContext();
   const { remoteBullets, localBullets, updateBullets } = useBulletContext();
+  const [appDimensions, setAppDimensions] = useState({ width: 0, height: 0 });
   const appRef = useRef<HTMLDivElement | null>(null);
   const localPlayerRef = useRef<HTMLDivElement | null>(null);
   const remotePlayerRef = useRef<HTMLDivElement | null>(null);
-  const [appDimensions, setAppDimensions] = useState({ width: 0, height: 0 });
 
-  console.log('App render');
+  console.log('AppEngine render');
 
   useEffect(() => {
     let animationId: number;
@@ -72,6 +51,7 @@ function App() {
       if (delta >= FRAME_DURATION) {
         last = now;
         const { width } = appDimensions;
+
         updateBullets(width);
 
         if (
@@ -80,7 +60,7 @@ function App() {
             remotePlayerRef.current!.getBoundingClientRect()
           )
         ) {
-          console.log('Collision!');
+          sendMessage({ type: 'gameOver', data: playerId });
         }
       }
 
@@ -92,7 +72,7 @@ function App() {
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, [localBullets, remotePlayerRef.current, updateBullets]);
+  }, [remotePlayerRef.current, localBullets, updateBullets, appDimensions]);
 
   useEffect(() => {
     if (!appRef.current) {
@@ -102,10 +82,6 @@ function App() {
     const { width, height } = appRef.current.getBoundingClientRect();
     setAppDimensions({ width, height });
   }, [appRef.current]);
-
-  if (playerId === null) {
-    return null;
-  }
 
   return (
     <AppDimensionsContext.Provider value={appDimensions}>
@@ -125,4 +101,4 @@ function App() {
   );
 }
 
-export default App;
+export default AppEngine;
