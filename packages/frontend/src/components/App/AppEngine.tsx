@@ -1,28 +1,23 @@
-import { useEffect, useContext, useRef, useState, createContext } from 'react';
+import { useEffect, useRef, useState, createContext } from 'react';
 
-import { LocalPlayer, RemotePlayer } from '../Player';
-import Bullet from '../Bullet';
-
+import { hasCollision } from './utils';
 import { useBulletContext } from '../../contexts/BulletContext';
 import { usePlayerContext } from '../../contexts/PlayerContext';
 import { useWebSocketContext } from '../../contexts/WebSocketContext';
+import Bullet from '../Bullet';
+import { LocalPlayer, RemotePlayer } from '../Player';
 
 import './App.css';
-import { hasCollision } from './utils';
 
 type AppDimensionsContextType = {
   width: number;
   height: number;
 };
 
-const AppDimensionsContext = createContext<AppDimensionsContextType>({
+export const AppDimensionsContext = createContext<AppDimensionsContextType>({
   width: 0,
   height: 0,
 });
-
-export function useAppDimensionsContext() {
-  return useContext(AppDimensionsContext);
-}
 
 const FRAME_DURATION = 1000 / 60;
 
@@ -72,7 +67,7 @@ function AppEngine() {
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, [remotePlayerRef.current, localBullets, updateBullets, appDimensions]);
+  }, [localBullets, appDimensions, playerId, sendMessage, updateBullets]);
 
   useEffect(() => {
     if (!appRef.current) {
@@ -81,7 +76,7 @@ function AppEngine() {
 
     const { width, height } = appRef.current.getBoundingClientRect();
     setAppDimensions({ width, height });
-  }, [appRef.current]);
+  }, []);
 
   return (
     <AppDimensionsContext.Provider value={appDimensions}>

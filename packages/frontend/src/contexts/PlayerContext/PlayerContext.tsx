@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useWebSocketContext } from './WebSocketContext';
+import { createContext, useEffect, useState } from 'react';
+
+import { useWebSocketContext } from '../WebSocketContext';
 
 type Players = Array<{ id: number; x: number; y: number }>;
 
@@ -8,17 +9,9 @@ type PlayerContextType = {
   players: Players;
 };
 
-const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
-
-export function usePlayerContext() {
-  const context = useContext(PlayerContext);
-
-  if (!context) {
-    throw new Error('usePlayerContext must be used within a PlayerProvider');
-  }
-
-  return context;
-}
+export const PlayerContext = createContext<PlayerContextType | undefined>(
+  undefined
+);
 
 export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const [playerId, setPlayerId] = useState<number | null>(null);

@@ -1,4 +1,4 @@
-import { createContext, useRef, useContext, useEffect, useState } from 'react';
+import { createContext, useRef, useEffect, useState } from 'react';
 
 const URL = 'ws://localhost:3000';
 
@@ -12,21 +12,9 @@ type WebSocketContextType = {
   sendMessage: (message: object) => void;
 };
 
-const WebSocketContext = createContext<WebSocketContextType | undefined>(
+export const WebSocketContext = createContext<WebSocketContextType | undefined>(
   undefined
 );
-
-export function useWebSocketContext() {
-  const context = useContext(WebSocketContext);
-
-  if (!context) {
-    throw new Error(
-      'useWebSocketContext must be used within a WebSocketProvider'
-    );
-  }
-
-  return context;
-}
 
 export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null);

@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useRef, useEffect } from 'react';
-import { usePlayerContext } from './PlayerContext';
-import { useWebSocketContext } from './WebSocketContext';
+import { createContext, useState, useRef, useEffect } from 'react';
+
+import { usePlayerContext } from '../PlayerContext';
+import { useWebSocketContext } from '../WebSocketContext';
 
 export type Bullet = {
   id: number;
@@ -15,17 +16,9 @@ type BulletContextType = {
   updateBullets: (appWidth: number) => void;
 };
 
-const BulletContext = createContext<BulletContextType | undefined>(undefined);
-
-export function useBulletContext() {
-  const context = useContext(BulletContext);
-
-  if (!context) {
-    throw new Error('useBulletContext must be used within a BulletProvider');
-  }
-
-  return context;
-}
+export const BulletContext = createContext<BulletContextType | undefined>(
+  undefined
+);
 
 export function BulletProvider({ children }: { children: React.ReactNode }) {
   const { playerId, players } = usePlayerContext();

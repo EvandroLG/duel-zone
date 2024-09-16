@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 
 import AppEngine from './AppEngine';
-
-import { useWebSocketContext } from '../../contexts/WebSocketContext';
 import { usePlayerContext } from '../../contexts/PlayerContext';
+import { useWebSocketContext } from '../../contexts/WebSocketContext';
+
+import './App.css';
 
 function AppManager() {
   const { lastMessage } = useWebSocketContext();
@@ -16,18 +17,18 @@ function AppManager() {
     if (lastMessage?.type === 'gameOver') {
       setWinner(lastMessage.data as number);
     }
-  }, [lastMessage?.type]);
+  }, [lastMessage?.type, lastMessage?.data]);
 
   if (!playerId) {
     return null;
   }
 
   if (winner === playerId) {
-    return <div>You won!</div>;
+    return <div className="message">You won! :)</div>;
   }
 
   if (winner !== null) {
-    return <div>You lost!</div>;
+    return <div className="message">You lost! :(</div>;
   }
 
   return <AppEngine />;

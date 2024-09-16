@@ -1,7 +1,6 @@
 import { createRoot } from 'react-dom/client';
 
 import App from './components/App';
-
 import { BulletProvider } from './contexts/BulletContext';
 import { PlayerProvider } from './contexts/PlayerContext';
 import { WebSocketProvider } from './contexts/WebSocketContext';
