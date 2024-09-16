@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useRef, useEffect } from 'react';
 import { usePlayerContext } from './PlayerContext';
 import { useWebSocketContext } from './WebSocketContext';
 
-type Bullet = {
+export type Bullet = {
   id: number;
   top: number;
   left: number;

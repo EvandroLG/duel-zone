@@ -1,11 +1,10 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, forwardRef } from 'react';
 
 import { usePlayerContext } from '../contexts/PlayerContext';
 
 import './Player.css';
 
-function RemotePlayer() {
-  const elementRef = useRef<HTMLDivElement | null>(null);
+const RemotePlayer = forwardRef<HTMLDivElement>((_, ref) => {
   const [topPosition, setTopPosition] = useState(0);
   const { playerId, players } = usePlayerContext();
 
@@ -21,7 +20,7 @@ function RemotePlayer() {
     () =>
       player?.id === players[0]?.id
         ? { backgroundColor: 'green', left: 0 }
-        : { backgroundColor: 'red', right: 0 },
+        : { backgroundColor: 'red', left: 1296 },
     [player, players]
   );
 
@@ -41,11 +40,11 @@ function RemotePlayer() {
 
   return (
     <div
-      ref={elementRef}
+      ref={ref}
       className="player"
       style={{ top: `${topPosition}px`, ...style }}
     />
   );
-}
+});
 
 export default RemotePlayer;

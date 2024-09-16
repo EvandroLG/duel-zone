@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, useEffect, useMemo, useState } from 'react';
 
 import { useBulletContext } from '../contexts/BulletContext';
 import { usePlayerContext } from '../contexts/PlayerContext';
@@ -7,8 +7,7 @@ import { useAppDimensionsContext } from '../App';
 
 import './Player.css';
 
-function LocalPlayer() {
-  const elementRef = useRef<HTMLDivElement | null>(null);
+const LocalPlayer = forwardRef<HTMLDivElement>((_, ref) => {
   const [topPosition, setTopPosition] = useState(0);
   const { playerId, players } = usePlayerContext();
   const { shoot } = useBulletContext();
@@ -19,12 +18,14 @@ function LocalPlayer() {
     () =>
       players[0]?.id === playerId
         ? { backgroundColor: 'green', left: 0 }
-        : { backgroundColor: 'red', right: 0 },
+        : { backgroundColor: 'red', left: 1296 },
     [players, playerId]
   );
 
   useEffect(() => {
     console.log('Setting up LocalPlayer component');
+
+    const elementRef = ref as React.MutableRefObject<HTMLDivElement>;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
@@ -78,15 +79,15 @@ function LocalPlayer() {
       console.log('Cleaning up LocalPlayer component');
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [appHeight, elementRef.current]);
+  }, [appHeight, ref]);
 
   return (
     <div
-      ref={elementRef}
+      ref={ref}
       className="player"
       style={{ top: `${topPosition}px`, ...style }}
     />
   );
-}
+});
 
 export default LocalPlayer;
