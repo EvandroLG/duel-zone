@@ -84,7 +84,7 @@ const LocalPlayer = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <div
       ref={ref}
-      className="player"
+      className="player local-player"
       style={{ top: `${topPosition}px`, ...style }}
     />
   );
