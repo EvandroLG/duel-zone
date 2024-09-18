@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, createContext } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { hasCollision } from './utils';
 import { useBulletContext } from '../../contexts/BulletContext';
@@ -8,16 +8,7 @@ import Bullet from '../Bullet';
 import { LocalPlayer, RemotePlayer } from '../Player';
 
 import './App.css';
-
-type AppDimensionsContextType = {
-  width: number;
-  height: number;
-};
-
-export const AppDimensionsContext = createContext<AppDimensionsContextType>({
-  width: 0,
-  height: 0,
-});
+import { AppDimensionsContext } from './AppDimensionsContext';
 
 const FRAME_DURATION = 1000 / 60;
 

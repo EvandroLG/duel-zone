@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 
-import AppEngine from './AppEngine';
 import { usePlayerContext } from '../../contexts/PlayerContext';
 import { useWebSocketContext } from '../../contexts/WebSocketContext';
 
 import './App.css';
 
+const AppEngine = lazy(() => import('./AppEngine'));
+
 function AppManager() {
   const { lastMessage } = useWebSocketContext();
-  const { playerId } = usePlayerContext();
+  const { playerId, players } = usePlayerContext();
   const [winner, setWinner] = useState<number | null>(null);
 
   console.log('AppManager render');
@@ -23,6 +24,10 @@ function AppManager() {
     return null;
   }
 
+  if (players.length < 2) {
+    return <div className="message">Waiting for another player...</div>;
+  }
+
   if (winner === playerId) {
     return <div className="message">You won! :)</div>;
   }
@@ -31,7 +36,11 @@ function AppManager() {
     return <div className="message">You lost! :(</div>;
   }
 
-  return <AppEngine />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AppEngine />
+    </Suspense>
+  );
 }
 
 export default AppManager;

@@ -1,6 +1,5 @@
 import { useContext } from 'react';
-
-import { AppDimensionsContext } from './AppEngine';
+import { AppDimensionsContext } from './AppDimensionsContext';
 
 export function useAppDimensionsContext() {
   return useContext(AppDimensionsContext);
