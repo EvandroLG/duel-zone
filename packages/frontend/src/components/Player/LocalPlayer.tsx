@@ -1,9 +1,10 @@
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 
-import { useBulletContext } from '../../contexts/BulletContext';
-import { usePlayerContext } from '../../contexts/PlayerContext';
-import { useWebSocketContext } from '../../contexts/WebSocketContext';
 import { useAppDimensionsContext } from '../App';
+
+import { useBulletContext } from '../../contexts/BulletContext';
+import { useWebSocketContext } from '../../contexts/WebSocketContext';
+import { usePlayerContext } from '../../contexts/PlayerContext';
 
 import './Player.css';
 
@@ -79,12 +80,20 @@ const LocalPlayer = forwardRef<HTMLDivElement>((_, ref) => {
       console.log('Cleaning up LocalPlayer component');
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [appHeight, appWidth, ref, sendMessage, shoot, topPosition]);
+  }, [
+    appHeight,
+    appWidth,
+    ref,
+    sendMessage,
+    shoot,
+    topPosition,
+    setTopPosition,
+  ]);
 
   return (
     <div
       ref={ref}
-      className="player local-player"
+      className="player player--local"
       style={{ top: `${topPosition}px`, ...style }}
     />
   );

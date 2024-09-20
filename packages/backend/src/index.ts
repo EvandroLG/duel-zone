@@ -15,7 +15,7 @@ let connectedPlayers = 0;
 
 wss.on('connection', (ws) => {
   if (connectedPlayers >= MAX_PLAYERS) {
-    ws.send(JSON.stringify({ type: 'error', data: 'Game is full' }));
+    ws.send(JSON.stringify({ type: 'gameFull', data: 'Game is full' }));
     ws.close();
     return;
   }

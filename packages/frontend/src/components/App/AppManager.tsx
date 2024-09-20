@@ -11,6 +11,7 @@ function AppManager() {
   const { lastMessage } = useWebSocketContext();
   const { playerId, players } = usePlayerContext();
   const [winner, setWinner] = useState<number | null>(null);
+  const [isGameFull, setIsGameFull] = useState(false);
 
   console.log('AppManager render');
 
@@ -18,7 +19,17 @@ function AppManager() {
     if (lastMessage?.type === 'gameOver') {
       setWinner(lastMessage.data as number);
     }
+
+    if (lastMessage?.type === 'gameFull') {
+      setIsGameFull(true);
+    } else {
+      setIsGameFull(false);
+    }
   }, [lastMessage?.type, lastMessage?.data]);
+
+  if (isGameFull) {
+    return <div className="message">Game is full. Try again later.</div>;
+  }
 
   if (!playerId) {
     return null;
