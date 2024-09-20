@@ -1,7 +1,5 @@
 import { createContext, useRef, useEffect, useState } from 'react';
 
-const URL = 'ws://localhost:3000';
-
 type WebSocketMessage = {
   type: string;
   data: unknown;
@@ -16,13 +14,18 @@ export const WebSocketContext = createContext<WebSocketContextType | undefined>(
   undefined
 );
 
-export function WebSocketProvider({ children }: { children: React.ReactNode }) {
+type WebSocketProviderProps = {
+  url: string;
+  children: React.ReactNode;
+};
+
+export function WebSocketProvider({ url, children }: WebSocketProviderProps) {
   const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
     console.log('useEffect: Setting up WebSocket connection');
-    const ws = new WebSocket(URL);
+    const ws = new WebSocket(url);
 
     ws.onopen = () => {
       console.log('WebSocket connected');
@@ -47,7 +50,7 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
       console.log('Cleaning up WebSocket connection');
       ws.close();
     };
-  }, []);
+  }, [url]);
 
   const sendMessage = (message: object) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
