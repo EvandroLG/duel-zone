@@ -1,9 +1,9 @@
 import { forwardRef, useEffect, useMemo, useState } from 'react';
+import { useWebSocket } from '@evandrolg/react-web-socket';
 
 import { useAppDimensionsContext } from '../App';
 
 import { useBulletContext } from '../../contexts/BulletContext';
-import { useWebSocketContext } from '../../contexts/WebSocketContext';
 import { usePlayerContext } from '../../contexts/PlayerContext';
 
 import './Player.css';
@@ -12,7 +12,7 @@ const LocalPlayer = forwardRef<HTMLDivElement>((_, ref) => {
   const [topPosition, setTopPosition] = useState(0);
   const { playerId, players } = usePlayerContext();
   const { shoot } = useBulletContext();
-  const { sendMessage } = useWebSocketContext();
+  const { sendMessage } = useWebSocket();
   const { height: appHeight, width: appWidth } = useAppDimensionsContext();
 
   const style = useMemo(

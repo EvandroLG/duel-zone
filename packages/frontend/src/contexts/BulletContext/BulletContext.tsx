@@ -1,7 +1,7 @@
 import { createContext, useState, useRef, useEffect } from 'react';
+import { useWebSocket } from '@evandrolg/react-web-socket';
 
 import { usePlayerContext } from '../PlayerContext';
-import { useWebSocketContext } from '../WebSocketContext';
 
 export type Bullet = {
   id: number;
@@ -24,7 +24,7 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
   const { playerId, players } = usePlayerContext();
   const [localBullets, setLocalBullets] = useState<Bullet[]>([]);
   const [remoteBullets, setRemoteBullets] = useState<Bullet[]>([]);
-  const { lastMessage, sendMessage } = useWebSocketContext();
+  const { lastMessage, sendMessage } = useWebSocket();
   const playersRef = useRef(players);
   const playerIdRef = useRef(playerId);
   const bulletIdRef = useRef(0);

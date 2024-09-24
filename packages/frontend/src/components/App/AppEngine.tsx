@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { useWebSocket } from '@evandrolg/react-web-socket';
 
 import { hasCollision } from './utils';
 import { useBulletContext } from '../../contexts/BulletContext';
 import { usePlayerContext } from '../../contexts/PlayerContext';
-import { useWebSocketContext } from '../../contexts/WebSocketContext';
 import Bullet from '../Bullet';
 import { LocalPlayer, RemotePlayer } from '../Player';
 
@@ -13,7 +13,7 @@ import { AppDimensionsContext } from './AppDimensionsContext';
 const FRAME_DURATION = 1000 / 60;
 
 function AppEngine() {
-  const { sendMessage } = useWebSocketContext();
+  const { sendMessage } = useWebSocket();
   const { playerId } = usePlayerContext();
   const { remoteBullets, localBullets, updateBullets } = useBulletContext();
   const [appDimensions, setAppDimensions] = useState({ width: 0, height: 0 });
