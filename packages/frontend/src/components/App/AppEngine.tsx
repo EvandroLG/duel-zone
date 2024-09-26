@@ -9,10 +9,12 @@ import { LocalPlayer, RemotePlayer } from '../Player';
 
 import './App.css';
 import { AppDimensionsContext } from './AppDimensionsContext';
+import { useBackgroundSound } from './useBackgroundSound';
 
 const FRAME_DURATION = 1000 / 60;
 
 function AppEngine() {
+  useBackgroundSound();
   const { sendMessage } = useWebSocket();
   const { playerId } = usePlayerContext();
   const { remoteBullets, localBullets, updateBullets } = useBulletContext();
