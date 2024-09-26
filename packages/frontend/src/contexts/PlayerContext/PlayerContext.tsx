@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
 type Players = Array<{ id: number; x: number; y: number }>;

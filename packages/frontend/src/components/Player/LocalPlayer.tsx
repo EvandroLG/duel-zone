@@ -1,10 +1,10 @@
 import { forwardRef, useEffect, useMemo, useState } from 'react';
-import { useWebSocket } from '@evandrolg/react-web-socket';
 
-import { useAppDimensionsContext } from '../App';
+import { useWebSocket } from '@evandrolg/react-web-socket';
 
 import { useBulletContext } from '../../contexts/BulletContext';
 import { usePlayerContext } from '../../contexts/PlayerContext';
+import { useAppDimensionsContext } from '../App';
 
 import './Player.css';
 

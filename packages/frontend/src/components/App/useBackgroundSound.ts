@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import backgroundSound from '../../assets/background.mp3';
 import useAudioPlayer from '../../hooks/useAudioPlayer';
 

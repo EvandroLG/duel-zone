@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+
 import { BulletContext } from './BulletContext';
 
 export function useBulletContext() {

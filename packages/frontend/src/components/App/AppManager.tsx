@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
+
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
 import { usePlayerContext } from '../../contexts/PlayerContext';

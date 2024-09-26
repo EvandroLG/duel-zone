@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import { Audio, AudioPropType, AudioType } from 'ts-audio';
 
 function useAudioPlayer(options: AudioPropType) {

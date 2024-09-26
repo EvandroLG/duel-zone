@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
 import { hasCollision } from './utils';
@@ -6,10 +7,10 @@ import { useBulletContext } from '../../contexts/BulletContext';
 import { usePlayerContext } from '../../contexts/PlayerContext';
 import Bullet from '../Bullet';
 import { LocalPlayer, RemotePlayer } from '../Player';
-
-import './App.css';
 import { AppDimensionsContext } from './AppDimensionsContext';
 import { useBackgroundSound } from './useBackgroundSound';
+
+import './App.css';
 
 const FRAME_DURATION = 1000 / 60;
 
