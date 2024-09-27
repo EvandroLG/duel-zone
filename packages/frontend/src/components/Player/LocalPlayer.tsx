@@ -13,7 +13,7 @@ const LocalPlayer = forwardRef<HTMLDivElement>((_, ref) => {
   const { playerId, players } = usePlayerContext();
   const { shoot } = useBulletContext();
   const { sendMessage } = useWebSocket();
-  const { height: appHeight, width: appWidth } = useAppDimensionsContext();
+  const { height: appHeight } = useAppDimensionsContext();
 
   const style = useMemo(
     () =>
@@ -64,13 +64,13 @@ const LocalPlayer = forwardRef<HTMLDivElement>((_, ref) => {
         e.preventDefault();
 
         if (!elementRef.current) {
-          shoot(0, 0);
+          shoot(0);
           return;
         }
 
         const { top } = elementRef.current.getBoundingClientRect();
 
-        shoot(top, appWidth);
+        shoot(top);
       }
     };
 
@@ -80,15 +80,7 @@ const LocalPlayer = forwardRef<HTMLDivElement>((_, ref) => {
       console.log('Cleaning up LocalPlayer component');
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [
-    appHeight,
-    appWidth,
-    ref,
-    sendMessage,
-    shoot,
-    topPosition,
-    setTopPosition,
-  ]);
+  }, [appHeight, ref, sendMessage, shoot, topPosition, setTopPosition]);
 
   return (
     <div

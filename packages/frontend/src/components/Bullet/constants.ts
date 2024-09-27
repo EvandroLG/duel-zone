@@ -1,0 +1,1 @@
+export const BULLET_INITIAL_LEFT_POSITIONS = [20, 1420];

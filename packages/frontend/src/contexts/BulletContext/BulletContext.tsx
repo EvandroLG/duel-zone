@@ -2,6 +2,7 @@ import { createContext, useState, useRef, useEffect } from 'react';
 
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
+import { BULLET_INITIAL_LEFT_POSITIONS } from '../../components/Bullet';
 import { usePlayerContext } from '../PlayerContext';
 
 export type Bullet = {
@@ -13,7 +14,7 @@ export type Bullet = {
 type BulletContextType = {
   remoteBullets: Bullet[];
   localBullets: Bullet[];
-  shoot: (top: number, appWidth: number) => void;
+  shoot: (top: number) => void;
   updateBullets: (appWidth: number) => void;
 };
 
@@ -49,9 +50,11 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
     }
   }, [lastMessage]);
 
-  const shoot = (top: number, appWidth: number) => {
+  const shoot = (top: number) => {
     const left =
-      playersRef.current[0]?.id === playerIdRef.current ? 20 : appWidth - 20;
+      playersRef.current[0]?.id === playerIdRef.current
+        ? BULLET_INITIAL_LEFT_POSITIONS[0]
+        : BULLET_INITIAL_LEFT_POSITIONS[1];
 
     setLocalBullets((prevBullets) => {
       const newBullets = [

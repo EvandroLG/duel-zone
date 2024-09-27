@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { Audio, AudioPropType, AudioType } from 'ts-audio';
 
-function useAudioPlayer(options: AudioPropType) {
+function useAudio(options: AudioPropType) {
   const audioRef = useRef<AudioType | null>(null);
 
   useEffect(() => {
@@ -31,4 +31,4 @@ function useAudioPlayer(options: AudioPropType) {
   return audioRef.current;
 }
 
-export default useAudioPlayer;
+export default useAudio;
