@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 
 import { BULLET_INITIAL_LEFT_POSITIONS } from './constants';
-import shootSound from '../../assets/shoot.wav';
+import shootSound from '../../assets/background.mp3';
 import useAudio from '../../hooks/useAudio';
 import './Bullet.css';
 
@@ -11,7 +11,7 @@ type BulletProps = {
 };
 
 function Bullet({ top, left }: BulletProps) {
-  const { play: audioPlay } = useAudio({ file: shootSound });
+  const { play: audioPlay } = useAudio({ file: shootSound, preload: true });
 
   useEffect(() => {
     if (BULLET_INITIAL_LEFT_POSITIONS.includes(left)) {
@@ -22,4 +22,4 @@ function Bullet({ top, left }: BulletProps) {
   return <div className="bullet" style={{ position: 'absolute', top, left }} />;
 }
 
-export default Bullet;
+export default memo(Bullet);

@@ -1,8 +1,8 @@
-import { createContext, useState, useRef, useEffect } from 'react';
+import { createContext, useState, useRef, useEffect, useCallback } from 'react';
 
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
-import { BULLET_INITIAL_LEFT_POSITIONS } from '../../components/Bullet';
+import { BULLET_INITIAL_LEFT_POSITIONS } from '../../components/Bullet/';
 import { usePlayerContext } from '../PlayerContext';
 
 export type Bullet = {
@@ -68,24 +68,30 @@ export function BulletProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const updateBullets = (appWidth: number) => {
-    setLocalBullets((prevBullets) => {
-      const newBullets = prevBullets
-        .map((bullet) => {
-          const left =
-            playersRef.current[0]?.id === playerIdRef.current
-              ? bullet.left + 10
-              : bullet.left - 10;
+  const updateBullets = useCallback(
+    (appWidth: number) => {
+      setLocalBullets((prevBullets) => {
+        const newBullets = prevBullets
+          .map((bullet) => {
+            const left =
+              playersRef.current[0]?.id === playerIdRef.current
+                ? bullet.left + 10
+                : bullet.left - 10;
 
-          return { ...bullet, left };
-        })
-        .filter(({ left }) => left >= 0 && left <= appWidth);
+            return { ...bullet, left };
+          })
+          .filter(({ left }) => left >= 0 && left <= appWidth);
 
-      sendMessage({ type: 'shoot', data: newBullets });
+        if (JSON.stringify(newBullets) !== JSON.stringify(prevBullets)) {
+          sendMessage({ type: 'shoot', data: newBullets });
+          return newBullets;
+        }
 
-      return newBullets;
-    });
-  };
+        return prevBullets;
+      });
+    },
+    [sendMessage]
+  );
 
   return (
     <BulletContext.Provider

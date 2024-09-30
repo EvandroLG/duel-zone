@@ -1,67 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { useWebSocket } from '@evandrolg/react-web-socket';
-
-import { hasCollision } from './utils';
-import { useBulletContext } from '../../contexts/BulletContext';
-import { usePlayerContext } from '../../contexts/PlayerContext';
-import Bullet from '../Bullet';
 import { LocalPlayer, RemotePlayer } from '../Player';
 import { AppDimensionsContext } from './AppDimensionsContext';
-import { useBackgroundSound } from './useBackgroundSound';
-
 import './App.css';
-
-const FRAME_DURATION = 1000 / 60;
+import { useBulletContext } from '../../contexts/BulletContext';
+import Bullet from '../Bullet';
+import useBulletAnimation from './useBulletAnimation';
 
 function AppEngine() {
-  useBackgroundSound();
-  const { sendMessage } = useWebSocket();
-  const { playerId } = usePlayerContext();
-  const { remoteBullets, localBullets, updateBullets } = useBulletContext();
+  //useBackgroundSound();
+  const { remoteBullets, localBullets } = useBulletContext();
   const [appDimensions, setAppDimensions] = useState({ width: 0, height: 0 });
   const appRef = useRef<HTMLDivElement | null>(null);
   const localPlayerRef = useRef<HTMLDivElement | null>(null);
   const remotePlayerRef = useRef<HTMLDivElement | null>(null);
+  useBulletAnimation(appDimensions, remotePlayerRef);
 
   console.log('AppEngine render');
-
-  useEffect(() => {
-    let animationId: number;
-    let last = 0;
-
-    function animation(now: number) {
-      if (localBullets.length === 0) {
-        return;
-      }
-
-      const delta = now - last;
-
-      if (delta >= FRAME_DURATION) {
-        last = now;
-        const { width } = appDimensions;
-
-        updateBullets(width);
-
-        if (
-          hasCollision(
-            localBullets,
-            remotePlayerRef.current!.getBoundingClientRect()
-          )
-        ) {
-          sendMessage({ type: 'gameOver', data: playerId });
-        }
-      }
-
-      animationId = requestAnimationFrame(animation);
-    }
-
-    animationId = requestAnimationFrame(animation);
-
-    return () => {
-      cancelAnimationFrame(animationId);
-    };
-  }, [localBullets, appDimensions, playerId, sendMessage, updateBullets]);
 
   useEffect(() => {
     if (!appRef.current) {
@@ -69,8 +24,13 @@ function AppEngine() {
     }
 
     const { width, height } = appRef.current.getBoundingClientRect();
+
+    if (width === appDimensions.width && height === appDimensions.height) {
+      return;
+    }
+
     setAppDimensions({ width, height });
-  }, []);
+  }, [appDimensions.width, appDimensions.height]);
 
   return (
     <AppDimensionsContext.Provider value={appDimensions}>
