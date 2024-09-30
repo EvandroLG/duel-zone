@@ -2,33 +2,51 @@ import { useEffect, useRef } from 'react';
 
 import { Audio, AudioPropType, AudioType } from 'ts-audio';
 
-function useAudio(options: AudioPropType) {
+type UseAudioOptions = AudioPropType & {
+  overlap?: boolean;
+};
+
+function useAudio(options: UseAudioOptions) {
+  const { overlap = false } = options;
   const audioRef = useRef<AudioType | null>(null);
 
-  useEffect(() => {
+  if (!overlap && audioRef.current === null) {
     audioRef.current = Audio(options);
+  }
+
+  useEffect(() => {
+    if (!overlap) {
+      audioRef.current?.stop();
+      audioRef.current = Audio(options);
+    }
 
     return () => {
       audioRef.current?.stop();
       audioRef.current = null;
     };
-  }, [options]);
+  }, [options, overlap]);
 
-  if (!audioRef.current) {
-    return {
-      play: () => {},
-      pause: () => {},
-      stop: () => {},
-      toggle: () => {},
-      on: () => {},
-      volume: 1,
-      loop: false,
-      state: 'state',
-      audioCtx: undefined,
-    };
-  }
+  const play = () => {
+    if (overlap) {
+      const audioInstance = Audio(options);
+      audioInstance.play();
 
-  return audioRef.current;
+      audioInstance.on('end', () => {
+        audioInstance.stop();
+      });
+    } else {
+      if (audioRef.current) {
+        audioRef.current.play();
+      }
+    }
+  };
+
+  const { state } = audioRef.current || {};
+
+  return {
+    play,
+    state,
+  };
 }
 
 export default useAudio;

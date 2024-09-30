@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { LocalPlayer, RemotePlayer } from '../Player';
 import { AppDimensionsContext } from './AppDimensionsContext';
 import './App.css';
+//import { useBackgroundSound } from './useBackgroundSound';
 import { useBulletContext } from '../../contexts/BulletContext';
 import Bullet from '../Bullet';
 import useBulletAnimation from './useBulletAnimation';
