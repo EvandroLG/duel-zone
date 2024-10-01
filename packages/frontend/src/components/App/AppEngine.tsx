@@ -3,13 +3,13 @@ import { useEffect, useRef, useState } from 'react';
 import { LocalPlayer, RemotePlayer } from '../Player';
 import { AppDimensionsContext } from './AppDimensionsContext';
 import './App.css';
-//import { useBackgroundSound } from './useBackgroundSound';
+import { useBackgroundSound } from './useBackgroundSound';
 import { useBulletContext } from '../../contexts/BulletContext';
 import Bullet from '../Bullet';
 import useBulletAnimation from './useBulletAnimation';
 
 function AppEngine() {
-  //useBackgroundSound();
+  useBackgroundSound();
   const { remoteBullets, localBullets } = useBulletContext();
   const [appDimensions, setAppDimensions] = useState({ width: 0, height: 0 });
   const appRef = useRef<HTMLDivElement | null>(null);

@@ -10,7 +10,7 @@ function useAudio(options: UseAudioOptions) {
   const { overlap = false } = options;
   const audioRef = useRef<AudioType | null>(null);
 
-  if (!overlap && audioRef.current === null) {
+  if (!overlap && !audioRef.current) {
     audioRef.current = Audio(options);
   }
 

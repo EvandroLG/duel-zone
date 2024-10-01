@@ -1,26 +1,32 @@
-import { useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import backgroundSound from '../../assets/background.mp3';
 import useAudio from '../../hooks/useAudio';
 
 export function useBackgroundSound() {
-  const { play, state } = useAudio({ file: backgroundSound, loop: true });
+  const [isPlaying, setIsPlaying] = useState(false);
+  const { play } = useAudio({
+    file: backgroundSound,
+    overlap: true,
+    loop: true,
+  });
+
+  const handleBackgroundSound = useCallback(
+    (e: KeyboardEvent) => {
+      if (isPlaying) return;
+
+      e.preventDefault();
+      play();
+      setIsPlaying(true);
+    },
+    [isPlaying, play]
+  );
 
   useEffect(() => {
-    function handleBackgroundSound(e: KeyboardEvent) {
-      e.preventDefault();
-
-      if (state === 'running') {
-        return;
-      }
-
-      play();
-    }
-
     window.addEventListener('keydown', handleBackgroundSound);
 
     return () => {
       window.removeEventListener('keydown', handleBackgroundSound);
     };
-  }, [play, state]);
+  }, [handleBackgroundSound]);
 }
