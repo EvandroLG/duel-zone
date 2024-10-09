@@ -6,7 +6,14 @@ type UseAudioOptions = AudioPropType & {
   overlap?: boolean;
 };
 
-function useAudio(options: UseAudioOptions) {
+export type UseAudioReturnType = {
+  play: () => void;
+  stop: AudioType['stop'] | undefined;
+  pause: AudioType['pause'] | undefined;
+  state: AudioType['state'] | undefined;
+};
+
+function useAudio(options: UseAudioOptions): UseAudioReturnType {
   const { overlap = false } = options;
   const audioRef = useRef<AudioType | null>(null);
 
@@ -15,8 +22,8 @@ function useAudio(options: UseAudioOptions) {
   }
 
   useEffect(() => {
-    if (!overlap) {
-      audioRef.current?.stop();
+    if (!overlap && !audioRef.current) {
+      console.log('useAudio - useEffect');
       audioRef.current = Audio(options);
     }
 
@@ -24,7 +31,7 @@ function useAudio(options: UseAudioOptions) {
       audioRef.current?.stop();
       audioRef.current = null;
     };
-  }, [options, overlap]);
+  }, [overlap, options]);
 
   const play = () => {
     if (overlap) {
@@ -41,10 +48,12 @@ function useAudio(options: UseAudioOptions) {
     }
   };
 
-  const { state } = audioRef.current || {};
+  const { state, stop, pause } = audioRef.current || {};
 
   return {
     play,
+    pause,
+    stop,
     state,
   };
 }

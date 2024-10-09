@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
+import { useBackgroundSound } from '../../contexts/BackgroundSoundContext';
 import { usePlayerContext } from '../../contexts/PlayerContext';
 
 import './App.css';
@@ -11,6 +12,7 @@ const AppEngine = lazy(() => import('./AppEngine'));
 function AppManager() {
   const { lastMessage } = useWebSocket();
   const { playerId, players } = usePlayerContext();
+  const { stop: stopBackgroundAudio } = useBackgroundSound();
   const [winner, setWinner] = useState<number | null>(null);
   const [isGameFull, setIsGameFull] = useState(false);
 
@@ -19,6 +21,7 @@ function AppManager() {
   useEffect(() => {
     if (lastMessage?.type === 'gameOver') {
       setWinner(lastMessage.data as number);
+      stopBackgroundAudio();
     }
 
     if (lastMessage?.type === 'gameFull') {
@@ -26,7 +29,7 @@ function AppManager() {
     } else {
       setIsGameFull(false);
     }
-  }, [lastMessage?.type, lastMessage?.data]);
+  }, [lastMessage?.type, lastMessage?.data, stopBackgroundAudio]);
 
   if (isGameFull) {
     return <div className="message">Game is full. Try again later.</div>;

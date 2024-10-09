@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
@@ -26,13 +26,32 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (lastMessage?.type === 'playersUpdate') {
-      console.log('Setting players:', lastMessage.data);
-      setPlayers(lastMessage.data as Players);
+      const updatedPlayers = lastMessage.data as Players;
+
+      const shouldUpdate = updatedPlayers.some((updatedPlayer) => {
+        const existingPlayer = players.find((p) => p.id === updatedPlayer.id);
+
+        return (
+          updatedPlayer.id !== playerId &&
+          (!existingPlayer ||
+            existingPlayer.x !== updatedPlayer.x ||
+            existingPlayer.y !== updatedPlayer.y)
+        );
+      });
+
+      if (shouldUpdate) {
+        setPlayers(lastMessage.data as Players);
+      }
     }
-  }, [lastMessage]);
+  }, [lastMessage, playerId, players]);
+
+  const contextValue = useMemo(
+    () => ({ playerId, players }),
+    [playerId, players]
+  );
 
   return (
-    <PlayerContext.Provider value={{ playerId, players }}>
+    <PlayerContext.Provider value={contextValue}>
       {children}
     </PlayerContext.Provider>
   );
