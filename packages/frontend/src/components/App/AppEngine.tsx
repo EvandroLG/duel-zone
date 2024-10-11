@@ -3,10 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { LocalPlayer, RemotePlayer } from '../Player';
 import { AppDimensionsContext } from './AppDimensionsContext';
 import './App.css';
-import { useBulletContext } from '../../contexts/BulletContext';
 import Bullet from '../Bullet';
 import useBulletAnimation from './useBulletAnimation';
 import { useBackgroundSound } from '../../contexts/BackgroundSoundContext';
+
+import { useBulletContext } from '@/contexts/BulletContext';
 
 function AppEngine() {
   useBackgroundSound();
