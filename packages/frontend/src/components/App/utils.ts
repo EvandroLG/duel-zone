@@ -1,4 +1,4 @@
-import { Bullet } from '../../contexts/BulletContext';
+import { Bullet } from '@/contexts/BulletContext';
 
 export function hasCollision(
   bullets: Bullet[],

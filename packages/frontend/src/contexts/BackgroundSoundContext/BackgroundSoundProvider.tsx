@@ -1,7 +1,8 @@
 import { createContext, useMemo } from 'react';
 
-import backgroundSound from '../../assets/background.mp3';
-import useAudio, { UseAudioReturnType } from '../../hooks/useAudio';
+import backgroundSound from '@/assets/background.mp3';
+
+import useAudio, { UseAudioReturnType } from '@/hooks/useAudio';
 
 export const BackgroundSoundContext = createContext<UseAudioReturnType | null>(
   null

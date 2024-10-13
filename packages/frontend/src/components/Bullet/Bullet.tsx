@@ -1,9 +1,10 @@
 import { memo, useEffect } from 'react';
 
-import { BULLET_INITIAL_LEFT_POSITIONS } from './constants';
-import shootSound from '../../assets/shoot.mp3';
-import useAudio from '../../hooks/useAudio';
-import './Bullet.css';
+import shootSound from '@/assets/shoot.mp3';
+
+import { BULLET_INITIAL_LEFT_POSITIONS } from '@/components/Bullet/constants';
+import useAudio from '@/hooks/useAudio';
+import '@/components/Bullet/Bullet.css';
 
 type BulletProps = {
   top: number;

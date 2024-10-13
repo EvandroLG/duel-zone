@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo, forwardRef } from 'react';
 
-import { usePlayerContext } from '../../contexts/PlayerContext';
+import { usePlayerContext } from '@/contexts/PlayerContext';
 
-import './Player.css';
+import '@/components/Player/Player.css';
 
 const RemotePlayer = forwardRef<HTMLDivElement>((_, ref) => {
   const [topPosition, setTopPosition] = useState(0);

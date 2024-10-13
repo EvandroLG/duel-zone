@@ -2,11 +2,11 @@ import { forwardRef, useEffect, useMemo, useState } from 'react';
 
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
-import { useBulletContext } from '../../contexts/BulletContext';
-import { usePlayerContext } from '../../contexts/PlayerContext';
-import { useAppDimensionsContext } from '../App';
+import { useAppDimensionsContext } from '@/components/App';
+import { useBulletContext } from '@/contexts/BulletContext';
+import { usePlayerContext } from '@/contexts/PlayerContext';
 
-import './Player.css';
+import '@/components/Player/Player.css';
 
 const LocalPlayer = forwardRef<HTMLDivElement>((_, ref) => {
   const [topPosition, setTopPosition] = useState(0);

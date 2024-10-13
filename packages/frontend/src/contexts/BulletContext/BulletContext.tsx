@@ -2,8 +2,8 @@ import { createContext, useState, useRef, useEffect, useCallback } from 'react';
 
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
-import { BULLET_INITIAL_LEFT_POSITIONS } from '../../components/Bullet/';
-import { usePlayerContext } from '../PlayerContext';
+import { BULLET_INITIAL_LEFT_POSITIONS } from '@/components/Bullet';
+import { usePlayerContext } from '@/contexts/PlayerContext';
 
 export type Bullet = {
   id: number;

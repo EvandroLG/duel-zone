@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 
-import { BackgroundSoundContext } from './BackgroundSoundProvider';
+import { BackgroundSoundContext } from '@/contexts/BackgroundSoundContext/BackgroundSoundProvider';
 
 export function useBackgroundSound() {
   const audio = useContext(BackgroundSoundContext);

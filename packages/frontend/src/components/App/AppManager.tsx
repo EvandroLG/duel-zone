@@ -2,10 +2,10 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
-import { useBackgroundSound } from '../../contexts/BackgroundSoundContext';
-import { usePlayerContext } from '../../contexts/PlayerContext';
+import { useBackgroundSound } from '@/contexts/BackgroundSoundContext';
+import { usePlayerContext } from '@/contexts/PlayerContext';
 
-import './App.css';
+import '@/components/App/App.css';
 
 const AppEngine = lazy(() => import('./AppEngine'));
 

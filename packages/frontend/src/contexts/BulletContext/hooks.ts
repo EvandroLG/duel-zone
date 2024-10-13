@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { BulletContext } from './BulletContext';
+import { BulletContext } from '@/contexts/BulletContext/BulletContext';
 
 export function useBulletContext() {
   const context = useContext(BulletContext);

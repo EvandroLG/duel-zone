@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { LocalPlayer, RemotePlayer } from '../Player';
-import { AppDimensionsContext } from './AppDimensionsContext';
-import './App.css';
-import Bullet from '../Bullet';
-import useBulletAnimation from './useBulletAnimation';
-import { useBackgroundSound } from '../../contexts/BackgroundSoundContext';
-
+import { AppDimensionsContext } from '@/components/App/AppDimensionsContext';
+import useBulletAnimation from '@/components/App/useBulletAnimation';
+import Bullet from '@/components/Bullet';
+import { LocalPlayer, RemotePlayer } from '@/components/Player';
+import '@/components/App/App.css';
+import { useBackgroundSound } from '@/contexts/BackgroundSoundContext';
 import { useBulletContext } from '@/contexts/BulletContext';
 
 function AppEngine() {

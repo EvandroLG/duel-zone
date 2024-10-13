@@ -2,9 +2,9 @@ import { MutableRefObject, useEffect, useRef } from 'react';
 
 import { useWebSocket } from '@evandrolg/react-web-socket';
 
-import { hasCollision } from './utils';
-import { useBulletContext } from '../../contexts/BulletContext';
-import { usePlayerContext } from '../../contexts/PlayerContext';
+import { hasCollision } from '@/components/App/utils';
+import { useBulletContext } from '@/contexts/BulletContext';
+import { usePlayerContext } from '@/contexts/PlayerContext';
 
 type AppDimensions = {
   width: number;
